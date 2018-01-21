@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ControlOrderDetail.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">domain.business</a> &gt; <span class="el_source">ControlOrderDetail.java</span></div><h1>ControlOrderDetail.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package domain.business;
+
+import data.DBFacade;
+import domain.entity.OrderData;
+import domain.entity.OrderDetail;
+import domain.exception.ItemException;
+import domain.exception.OrderException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author stev
+ */
+@WebServlet(name = &quot;ControlOrderDetail&quot;, urlPatterns = {&quot;/ControlOrderDetail&quot;})
+<span class="nc" id="L30">public class ControlOrderDetail extends HttpServlet {</span>
+
+    /**
+     * Processes requests for both HTTP &lt;code&gt;GET&lt;/code&gt; and &lt;code&gt;POST&lt;/code&gt;
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, OrderException, ItemException {
+<span class="nc" id="L43">        response.setContentType(&quot;text/html;charset=UTF-8&quot;);</span>
+        
+<span class="nc" id="L45">        DOFacade dof = new DOFacade();</span>
+<span class="nc" id="L46">        Calc c = new Calc();</span>
+        
+        // int orderId = Integer.parseInt((String)request.getAttribute(&quot;orderId&quot;));
+<span class="nc" id="L49">        int orderId = (int) request.getAttribute(&quot;orderId&quot;);</span>
+        
+<span class="nc" id="L51">        int orderLength = dof.getOrderData( orderId ).getOrderDataLength();</span>
+<span class="nc" id="L52">        int orderWidth = dof.getOrderData( orderId ).getOrderDataWidth();</span>
+<span class="nc" id="L53">        int orderHeight = dof.getOrderData( orderId ).getOrderDataHeight();</span>
+<span class="nc" id="L54">        int orderFloor = dof.getOrderData( orderId ).getOrderDataFloor();</span>
+<span class="nc" id="L55">        int orderRoof = dof.getOrderData( orderId ).getOrderDataRoof();</span>
+<span class="nc" id="L56">        int orderSide = dof.getOrderData( orderId ).getOrderDataSide();</span>
+        
+        // A Carport allways have 8 or 10 Træstolper in different sizes
+        // A Carport allways have 1 or 2 Skruer with 50stk
+        // A Carport allways have a Roof if its flat its (width x length) else its  ((width x length) x 1.5)
+        // A Carport allways have a Floor and its (width x length)
+        // A Carport allways have sides and its two times (height x length) and one time (width x height) 
+        
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if( orderLength &gt; 500 ){</span>
+            // Skruer item_id = 2
+<span class="nc" id="L66">            dof.insertNewOrderDetail( 2, 1, orderId, 2 ) ;</span>
+            // Træstolter item_id = 1 
+<span class="nc" id="L68">            dof.insertNewOrderDetail( 6, c.getMeasurementForWoodPillar(orderHeight), orderId, 1 );</span>
+            // Træstolper Item_id 1 for top length
+<span class="nc" id="L70">            dof.insertNewOrderDetail( 2, orderLength, orderId, 1 );</span>
+            // Træstolper Item_id 1 for top Width
+<span class="nc" id="L72">            dof.insertNewOrderDetail( 2, orderWidth, orderId, 1 );</span>
+            
+            // Roof is FK_Item_id = 2 (Item_Type)
+<span class="nc" id="L75">            dof.insertNewOrderDetail( c.getQuantityForRoof(orderLength), c.getMeasurementForRoof(orderWidth), orderId, orderRoof );</span>
+            // Side is FK_Item_id = 2 (Item_Type) 
+<span class="nc" id="L77">            dof.insertNewOrderDetail( orderHeight, c.getQuantityForSide(orderLength, orderWidth), orderId, orderSide );</span>
+            // Floor is FK_Item_id = 4 (Item_Type)
+<span class="nc" id="L79">            dof.insertNewOrderDetail( c.getMeasurementForFloor(orderLength), orderWidth, orderId, orderFloor );</span>
+            
+           
+        }else{
+            // Skruer item_id = 2
+<span class="nc" id="L84">            dof.insertNewOrderDetail( 1, 1, orderId, 2 );</span>
+            // Træstolter item_id = 1
+<span class="nc" id="L86">            dof.insertNewOrderDetail( 4, c.getMeasurementForWoodPillar(orderHeight), orderId, 1 );</span>
+               // Træstolper Item_id 1 for top length
+<span class="nc" id="L88">            dof.insertNewOrderDetail( 2, orderLength, orderId, 1 );</span>
+               // Træstolper Item_id 1 for top Width
+<span class="nc" id="L90">            dof.insertNewOrderDetail( 2, orderWidth, orderId, 1 );</span>
+            
+             // Roof is FK_Item_id = 2 (Item_Type)
+<span class="nc" id="L93">            dof.insertNewOrderDetail( c.getQuantityForRoof(orderLength), c.getMeasurementForRoof(orderWidth), orderId, orderRoof );</span>
+            // Side is FK_Item_id = 2 (Item_Type) 
+<span class="nc" id="L95">            dof.insertNewOrderDetail( orderHeight, c.getQuantityForSide(orderLength, orderWidth), orderId, orderSide );</span>
+            // Floor is FK_Item_id = 4 (Item_Type)
+<span class="nc" id="L97">            dof.insertNewOrderDetail( c.getMeasurementForFloor(orderLength), orderWidth, orderId, orderFloor );</span>
+        }
+        
+        
+        // Gets all orderDetails from DB in an ArrayList so we can go thru every one and calculate a totalprice
+<span class="nc" id="L102">        ArrayList&lt;OrderDetail&gt; alod = dof.getAllOrderDetailById(orderId);</span>
+        // Gets totalPrice
+<span class="nc" id="L104">        double totalPrice = c.getTotalPrice(alod);</span>
+<span class="nc" id="L105">        double moms = c.getMomsPrice(totalPrice);</span>
+       
+            // setting attribute OrderId 
+<span class="nc" id="L108">            request.getSession().setAttribute(&quot;totalPrice&quot;,totalPrice);</span>
+<span class="nc" id="L109">            request.getSession().setAttribute(&quot;length&quot;,orderLength);</span>
+<span class="nc" id="L110">            request.getSession().setAttribute(&quot;width&quot;,orderWidth);</span>
+<span class="nc" id="L111">            request.getSession().setAttribute(&quot;moms&quot;, moms);</span>
+            
+            
+        
+<span class="nc" id="L115">         response.sendRedirect(&quot;order.jsp&quot;);</span>
+        
+<span class="nc" id="L117">    }</span>
+
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;HttpServlet methods. Click on the + sign on the left to edit the code.&quot;&gt;
+    /**
+     * Handles the HTTP &lt;code&gt;GET&lt;/code&gt; method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            try {
+<span class="nc" id="L133">                processRequest(request, response);</span>
+<span class="nc" id="L134">            } catch (ItemException ex) {</span>
+<span class="nc" id="L135">                Logger.getLogger(ControlOrderDetail.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L136">            }</span>
+<span class="nc" id="L137">        } catch (OrderException ex) {</span>
+<span class="nc" id="L138">            Logger.getLogger(ControlOrderDetail.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L139">        }</span>
+<span class="nc" id="L140">    }</span>
+
+    /**
+     * Handles the HTTP &lt;code&gt;POST&lt;/code&gt; method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            try {
+<span class="nc" id="L155">                processRequest(request, response);</span>
+<span class="nc" id="L156">            } catch (ItemException ex) {</span>
+<span class="nc" id="L157">                Logger.getLogger(ControlOrderDetail.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L158">            }</span>
+<span class="nc" id="L159">        } catch (OrderException ex) {</span>
+<span class="nc" id="L160">            Logger.getLogger(ControlOrderDetail.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L161">        }</span>
+<span class="nc" id="L162">    }</span>
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+<span class="nc" id="L171">        return &quot;Short description&quot;;</span>
+    }// &lt;/editor-fold&gt;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

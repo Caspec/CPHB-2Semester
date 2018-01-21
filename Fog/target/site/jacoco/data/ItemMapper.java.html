@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ItemMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">data</a> &gt; <span class="el_source">ItemMapper.java</span></div><h1>ItemMapper.java</h1><pre class="source lang-java linenums">package data;
+
+import domain.entity.Item;
+import domain.exception.ItemException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+<span class="nc" id="L11">public class ItemMapper {</span>
+
+    // Insert new item, Transaction
+    public void createNewItem(String item_name, String item_info, double item_price, int FK_Item_id) throws ItemException {
+
+<span class="nc" id="L16">        Connection conn = new DB().getConnection();</span>
+        try {
+            //Starter transaktion
+<span class="nc" id="L19">            String ins_item = &quot;INSERT INTO `fogdb`.`Item` (`Item_name`, `Item_info`, `Item_price`, `FK_Item_id`) VALUES (?, ?, ?, ?)&quot;;</span>
+<span class="nc" id="L20">            PreparedStatement orderStmt = conn.prepareStatement(ins_item);</span>
+
+            //Transaction
+<span class="nc" id="L23">            conn.setAutoCommit(false);</span>
+
+<span class="nc" id="L25">            orderStmt.setString(1, item_name);</span>
+<span class="nc" id="L26">            orderStmt.setString(2, item_info);</span>
+<span class="nc" id="L27">            orderStmt.setDouble(3, item_price);</span>
+<span class="nc" id="L28">            orderStmt.setInt(4, FK_Item_id);</span>
+<span class="nc" id="L29">            orderStmt.executeUpdate();</span>
+
+<span class="nc" id="L31">            conn.commit();</span>
+<span class="nc" id="L32">        } catch (SQLException ex) {</span>
+<span class="nc" id="L33">            ex.printStackTrace();</span>
+            try {
+<span class="nc" id="L35">                conn.rollback();</span>
+<span class="nc" id="L36">            } catch (SQLException ex1) {</span>
+<span class="nc" id="L37">                ex1.printStackTrace();</span>
+<span class="nc" id="L38">                throw new ItemException(&quot;Error in createNewItem &quot; + ex1.getMessage());</span>
+<span class="nc" id="L39">            }</span>
+<span class="nc" id="L40">        }</span>
+<span class="nc" id="L41">    }</span>
+
+    // Get one item, show item &quot;vismateriale.jsp&quot;
+    public Item getItem(int id) throws ItemException {
+<span class="nc" id="L45">        Item item = null;</span>
+        try {
+<span class="nc" id="L47">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L48">            String sql = &quot;SELECT * FROM Item WHERE Item_id = ?&quot;;</span>
+<span class="nc" id="L49">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L50">            pstmt.setInt(1, id);</span>
+<span class="nc" id="L51">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L53">                int item_id = rs.getInt(&quot;Item_id&quot;);</span>
+<span class="nc" id="L54">                String item_name = rs.getString(&quot;Item_name&quot;);</span>
+<span class="nc" id="L55">                String item_info = rs.getString(&quot;Item_info&quot;);</span>
+<span class="nc" id="L56">                Double item_price = rs.getDouble(&quot;Item_price&quot;);</span>
+<span class="nc" id="L57">                int FK_Item_id = rs.getInt(&quot;FK_Item_id&quot;);</span>
+<span class="nc" id="L58">                item = new Item(item_id, item_name, item_info, item_price, FK_Item_id);</span>
+            }
+<span class="nc" id="L60">            pstmt.close();</span>
+<span class="nc" id="L61">            conn.close();</span>
+<span class="nc" id="L62">        } catch (SQLException ex) {</span>
+<span class="nc" id="L63">            ex.printStackTrace();</span>
+<span class="nc" id="L64">            throw new ItemException(&quot;Error in getItem() &quot; + ex.getMessage());</span>
+<span class="nc" id="L65">        }</span>
+
+<span class="nc" id="L67">        return item;</span>
+    }
+
+    // Get all Item, show all items &quot;lager.jsp&quot;
+    public ArrayList&lt;Item&gt; getAllItem() throws ItemException {
+<span class="nc" id="L72">        Item item = null;</span>
+<span class="nc" id="L73">        ArrayList&lt;Item&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L75">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L76">            String sql = &quot;SELECT * FROM Item&quot;;</span>
+<span class="nc" id="L77">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L78">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L80">                int item_id = rs.getInt(&quot;Item_id&quot;);</span>
+<span class="nc" id="L81">                String item_name = rs.getString(&quot;Item_name&quot;);</span>
+<span class="nc" id="L82">                String item_info = rs.getString(&quot;Item_info&quot;);</span>
+<span class="nc" id="L83">                Double item_price = rs.getDouble(&quot;Item_price&quot;);</span>
+<span class="nc" id="L84">                int FK_Item_id = rs.getInt(&quot;FK_Item_id&quot;);</span>
+<span class="nc" id="L85">                item = new Item(item_id, item_name, item_info, item_price, FK_Item_id);</span>
+<span class="nc" id="L86">                al.add(item);</span>
+<span class="nc" id="L87">            }</span>
+<span class="nc" id="L88">            pstmt.close();</span>
+<span class="nc" id="L89">            conn.close();</span>
+<span class="nc" id="L90">        } catch (SQLException ex) {</span>
+<span class="nc" id="L91">            ex.printStackTrace();</span>
+<span class="nc" id="L92">            throw new ItemException(&quot;Error in getAllItem () &quot; + ex.getMessage());</span>
+<span class="nc" id="L93">        }</span>
+
+<span class="nc" id="L95">        return al;</span>
+    }
+
+    // Used in step wizard.jsp (dropdowns)
+    public ArrayList&lt;Item&gt; getAllItemByTypeId(int typeId) throws ItemException 
+    {
+<span class="nc" id="L101">        Item item = null;</span>
+<span class="nc" id="L102">        ArrayList&lt;Item&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L104">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L105">            String sql = &quot;SELECT * FROM Item WHERE FK_Item_id = ?&quot;;</span>
+<span class="nc" id="L106">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L107">            pstmt.setInt(1, typeId);</span>
+<span class="nc" id="L108">            ResultSet rs = pstmt.executeQuery();</span>
+            
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L111">                int item_id = rs.getInt(&quot;Item_id&quot;);</span>
+<span class="nc" id="L112">                String item_name = rs.getString(&quot;Item_name&quot;);</span>
+<span class="nc" id="L113">                String item_info = rs.getString(&quot;Item_info&quot;);</span>
+<span class="nc" id="L114">                Double item_price = rs.getDouble(&quot;Item_price&quot;);</span>
+<span class="nc" id="L115">                int FK_Item_id = rs.getInt(&quot;FK_Item_id&quot;);</span>
+<span class="nc" id="L116">                item = new Item(item_id, item_name, item_info, item_price, FK_Item_id);</span>
+<span class="nc" id="L117">                al.add(item);</span>
+<span class="nc" id="L118">            }</span>
+<span class="nc" id="L119">            pstmt.close();</span>
+<span class="nc" id="L120">            conn.close();</span>
+<span class="nc" id="L121">        } catch (SQLException ex) {</span>
+<span class="nc" id="L122">            ex.printStackTrace();</span>
+<span class="nc" id="L123">            throw new ItemException(&quot;Error in getAllItem () &quot; + ex.getMessage());</span>
+<span class="nc" id="L124">        }</span>
+
+<span class="nc" id="L126">        return al;</span>
+    }
+    
+    // update item, ControlEditItem
+    public void setItem(String item_name, String item_info, double item_price, int item_id) throws ItemException {
+
+<span class="nc" id="L132">        Connection conn = new DB().getConnection();</span>
+        try {
+            //Starter transaktion
+<span class="nc" id="L135">            String ins_item = &quot;UPDATE `fogdb`.`Item` SET `Item_name`=?, `Item_info`=?, `Item_price`=? WHERE `Item_id`=?&quot;;</span>
+<span class="nc" id="L136">            PreparedStatement orderStmt = conn.prepareStatement(ins_item);</span>
+
+            //Transaction
+<span class="nc" id="L139">            conn.setAutoCommit(false);</span>
+
+<span class="nc" id="L141">            orderStmt.setString(1, item_name);</span>
+<span class="nc" id="L142">            orderStmt.setString(2, item_info);</span>
+<span class="nc" id="L143">            orderStmt.setDouble(3, item_price);</span>
+<span class="nc" id="L144">            orderStmt.setInt(4, item_id);</span>
+<span class="nc" id="L145">            orderStmt.executeUpdate();</span>
+
+<span class="nc" id="L147">            conn.commit();</span>
+<span class="nc" id="L148">        } catch (SQLException ex) {</span>
+<span class="nc" id="L149">            ex.printStackTrace();</span>
+            try {
+<span class="nc" id="L151">                conn.rollback();</span>
+<span class="nc" id="L152">            } catch (SQLException ex1) {</span>
+<span class="nc" id="L153">                ex1.printStackTrace();</span>
+<span class="nc" id="L154">                throw new ItemException(&quot;Error in setItem &quot; + ex1.getMessage());</span>
+<span class="nc" id="L155">            }</span>
+<span class="nc" id="L156">        }</span>
+<span class="nc" id="L157">    }</span>
+
+    public static void main(String[] args) throws ItemException {
+
+<span class="nc" id="L161">        Item o = new ItemMapper().getItem(1);</span>
+<span class="nc" id="L162">        System.out.println(o);</span>
+
+<span class="nc" id="L164">        ArrayList&lt;Item&gt; getAllItem = new ItemMapper().getAllItem();</span>
+<span class="nc" id="L165">        System.out.println(getAllItem);</span>
+<span class="nc" id="L166">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

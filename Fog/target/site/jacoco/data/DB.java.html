@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DB.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">data</a> &gt; <span class="el_source">DB.java</span></div><h1>DB.java</h1><pre class="source lang-java linenums">package data;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+//=== encapsulates code to get and release a connection
+//=== Encapsulates handling of connections and 
+//=== SQL-statements
+<span class="nc" id="L10">public class DB {</span>
+
+//    private Connection con;
+//    private static DB instance;
+//    private static PreparedStatement stmt;
+<span class="nc" id="L15">    private static String driver = &quot;com.mysql.jdbc.Driver&quot;;</span>
+<span class="nc" id="L16">    private static String URL = &quot;jdbc:mysql://207.154.220.147:3306/fogdb&quot;;</span>
+<span class="nc" id="L17">    private static String id = &quot;cc3&quot;;</span>
+<span class="nc" id="L18">    private static String pw = &quot;casper02&quot;;</span>
+
+    public Connection getConnection() {
+<span class="nc" id="L21">        Connection con = null;</span>
+        try {
+<span class="nc" id="L23">            Class.forName(driver);</span>
+<span class="nc" id="L24">            con = DriverManager.getConnection(URL, id, pw);  // The connection will be released upon program </span>
+
+<span class="nc" id="L26">        } catch (Exception e) {</span>
+<span class="nc" id="L27">            System.out.println(&quot;\n*** Remember to insert your  ID and PW in the DBConnector class! ***\n&quot;);</span>
+<span class="nc" id="L28">            System.out.println(&quot;error in DBConnector.getConnection()&quot;);</span>
+<span class="nc" id="L29">            System.out.println(e);</span>
+<span class="nc" id="L30">        }</span>
+
+<span class="nc" id="L32">        return con;</span>
+    }
+
+    public void releaseConnection(Connection con) {
+        try {
+<span class="nc" id="L37">            con.close();</span>
+<span class="nc" id="L38">        } catch (Exception e) {</span>
+<span class="nc" id="L39">            System.err.println(e);</span>
+<span class="nc" id="L40">        }</span>
+<span class="nc" id="L41">    }</span>
+    
+    /* The singleton implementation of methods below is not used by ZipcodeMapper in DataMapperDemo2
+     neither the preparedStatement */
+    /* private DB() {
+        try {
+            Class.forName(driver);
+            con = DriverManager.getConnection(URL, id, pw);  // The connection will be released upon program 
+            // termination by the garbage collector
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(&quot;Error in DB constructor&quot;);
+            System.out.println(e);
+        }
+    }
+
+    private static DB getInstance() {
+        if (instance == null) {
+            instance = new DB();
+        }
+        return instance;
+    }
+
+   public static PreparedStatement prepare(String SQLString) {
+        try {
+            stmt = getInstance().con.prepareStatement(SQLString);
+        } catch (SQLException e) {
+            System.out.println(&quot;Error in DB.prepare()&quot; + e);
+        }
+        return stmt;
+    }
+
+    public static void cleanUp(PreparedStatement stmt, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception e) {
+            System.out.println(&quot;Error in DB.cleanUp() closing resultSet&quot; + e);
+        }
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (Exception e) {
+            System.out.println(&quot;Error in DB.cleanUp() closing preparedStatement&quot; + e);
+        }
+        //Don't close con object stored on DB singleton instance
+        //GC will take care of it upon program termination
+    }
+*/
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

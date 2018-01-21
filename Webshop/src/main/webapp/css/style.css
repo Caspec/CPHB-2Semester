@@ -1,0 +1,97 @@
+a{
+    text-decoration: none;
+    color: #cc0004;
+}
+
+#wrapper{
+    width: 100%;
+    min-height: 800px;
+}
+
+#content{
+    width: 35%;
+    min-height: 600px;
+    margin-top: 70px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#kurv{
+    min-width: 430px;
+    min-height: 450px;
+    background-color: #FFFFFF;
+    z-index: 2;
+    float: right;
+    margin-right: 15px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+#kurvtable{
+    margin: 40px;
+    margin-left: 20px; 
+    margin-top: 10px;
+}
+
+#tops > div, #bottoms > div
+{
+    display: inline-block;
+    margin: 10px;
+    border: solid 1px #000;
+    text-align: center;
+}
+
+.toppingbutton {
+    margin-left: 10px !important;
+}
+
+.buttombutton {
+    margin-left: 10px !important;
+}
+
+.border {
+    border: 1px solid black;
+}
+
+.img {
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.topping {
+    float: left !important;
+    padding: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.topping .toppingimg {
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.bottom {
+    float: left !important;
+    margin-left: 60px !important;
+    padding: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.bottom .bottomimg {
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+nav ul li{
+    list-style: none;
+    color: #cc0004;
+}
+
+footer {
+    text-align: center !important;
+    font-size: 20px !important;
+    color: #cc0004 !important;
+}
+
+hr {
+    border: none;
+    height: 10px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}

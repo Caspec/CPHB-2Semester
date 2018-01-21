@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegionMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">data</a> &gt; <span class="el_source">RegionMapper.java</span></div><h1>RegionMapper.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package data;
+
+import domain.entity.getRegion;
+import domain.exception.RegionException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+
+/**
+ *
+ * @author Makemewant
+ */
+<span class="nc" id="L21">public class RegionMapper {</span>
+
+    // Get all region range 1100
+    public ArrayList&lt;getRegion&gt; getAllRegionsStartRange1100() throws RegionException {
+<span class="nc" id="L25">        getRegion region = null;</span>
+<span class="nc" id="L26">        ArrayList&lt;getRegion&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L28">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L29">            String sql = &quot;SELECT * FROM User INNER JOIN `Order` ON `Order`.FK_User_id = User.User_id WHERE User_zip &gt;= 1100 &amp;&amp; User_zip &lt;= 3500&quot;;</span>
+<span class="nc" id="L30">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L31">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L33">                int user_id = rs.getInt(&quot;User_id&quot;);</span>
+<span class="nc" id="L34">                String user_name = rs.getString(&quot;User_name&quot;);</span>
+<span class="nc" id="L35">                String user_email = rs.getString(&quot;User_email&quot;);</span>
+<span class="nc" id="L36">                String user_adress = rs.getString(&quot;User_adress&quot;);</span>
+<span class="nc" id="L37">                String user_phone = rs.getString(&quot;User_phone&quot;);</span>
+<span class="nc" id="L38">                int user_zip = rs.getInt(&quot;User_zip&quot;);</span>
+<span class="nc" id="L39">                Date order_recived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L40">                region = new getRegion(user_id, user_name, user_email, user_adress, user_phone, user_zip, order_recived);</span>
+<span class="nc" id="L41">                al.add(region);</span>
+<span class="nc" id="L42">            }</span>
+<span class="nc" id="L43">            pstmt.close();</span>
+<span class="nc" id="L44">            conn.close();</span>
+<span class="nc" id="L45">        } catch (SQLException ex) {</span>
+<span class="nc" id="L46">            ex.printStackTrace();</span>
+<span class="nc" id="L47">            throw new RegionException(&quot;Error in getAllCustomers() &quot; + ex.getMessage());</span>
+<span class="nc" id="L48">        }</span>
+
+<span class="nc" id="L50">        return al;</span>
+    }
+
+    // Get all region range 3510
+    public ArrayList&lt;getRegion&gt; getAllRegionsStartRange3510() throws RegionException {
+<span class="nc" id="L55">        getRegion region = null;</span>
+<span class="nc" id="L56">        ArrayList&lt;getRegion&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L58">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L59">            String sql = &quot;SELECT * FROM User INNER JOIN `Order` ON `Order`.FK_User_id = User.User_id WHERE User_zip &gt;= 3510 &amp;&amp; User_zip &lt;= 5500&quot;;</span>
+<span class="nc" id="L60">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L61">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L63">                int user_id = rs.getInt(&quot;User_id&quot;);</span>
+<span class="nc" id="L64">                String user_name = rs.getString(&quot;User_name&quot;);</span>
+<span class="nc" id="L65">                String user_email = rs.getString(&quot;User_email&quot;);</span>
+<span class="nc" id="L66">                String user_adress = rs.getString(&quot;User_adress&quot;);</span>
+<span class="nc" id="L67">                String user_phone = rs.getString(&quot;User_phone&quot;);</span>
+<span class="nc" id="L68">                int user_zip = rs.getInt(&quot;User_zip&quot;);</span>
+<span class="nc" id="L69">                Date order_recived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L70">                region = new getRegion(user_id, user_name, user_email, user_adress, user_phone, user_zip, order_recived);</span>
+<span class="nc" id="L71">                al.add(region);</span>
+<span class="nc" id="L72">            }</span>
+<span class="nc" id="L73">            pstmt.close();</span>
+<span class="nc" id="L74">            conn.close();</span>
+<span class="nc" id="L75">        } catch (SQLException ex) {</span>
+<span class="nc" id="L76">            ex.printStackTrace();</span>
+<span class="nc" id="L77">            throw new RegionException(&quot;Error in getAllCustomers() &quot; + ex.getMessage());</span>
+<span class="nc" id="L78">        }</span>
+
+<span class="nc" id="L80">        return al;</span>
+    }
+
+    // Get all region range 5510
+    public ArrayList&lt;getRegion&gt; getAllRegionsStartRange5510() throws RegionException {
+<span class="nc" id="L85">        getRegion region = null;</span>
+<span class="nc" id="L86">        ArrayList&lt;getRegion&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L88">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L89">            String sql = &quot;SELECT * FROM User INNER JOIN `Order` ON `Order`.FK_User_id = User.User_id WHERE User_zip &gt;= 5510 &amp;&amp; User_zip &lt;= 7500&quot;;</span>
+<span class="nc" id="L90">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L91">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L93">                int user_id = rs.getInt(&quot;User_id&quot;);</span>
+<span class="nc" id="L94">                String user_name = rs.getString(&quot;User_name&quot;);</span>
+<span class="nc" id="L95">                String user_email = rs.getString(&quot;User_email&quot;);</span>
+<span class="nc" id="L96">                String user_adress = rs.getString(&quot;User_adress&quot;);</span>
+<span class="nc" id="L97">                String user_phone = rs.getString(&quot;User_phone&quot;);</span>
+<span class="nc" id="L98">                int user_zip = rs.getInt(&quot;User_zip&quot;);</span>
+<span class="nc" id="L99">                Date order_recived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L100">                region = new getRegion(user_id, user_name, user_email, user_adress, user_phone, user_zip, order_recived);</span>
+<span class="nc" id="L101">                al.add(region);</span>
+<span class="nc" id="L102">            }</span>
+<span class="nc" id="L103">            pstmt.close();</span>
+<span class="nc" id="L104">            conn.close();</span>
+<span class="nc" id="L105">        } catch (SQLException ex) {</span>
+<span class="nc" id="L106">            ex.printStackTrace();</span>
+<span class="nc" id="L107">            throw new RegionException(&quot;Error in getAllCustomers() &quot; + ex.getMessage());</span>
+<span class="nc" id="L108">        }</span>
+
+<span class="nc" id="L110">        return al;</span>
+    }
+
+    // Get all region range 7510
+    public ArrayList&lt;getRegion&gt; getAllRegionsStartRange7510() throws RegionException {
+<span class="nc" id="L115">        getRegion region = null;</span>
+<span class="nc" id="L116">        ArrayList&lt;getRegion&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L118">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L119">            String sql = &quot;SELECT * FROM User INNER JOIN `Order` ON `Order`.FK_User_id = User.User_id WHERE User_zip &gt;= 7510 &amp;&amp; User_zip &lt;= 9000&quot;;</span>
+<span class="nc" id="L120">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L121">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L123">                int user_id = rs.getInt(&quot;User_id&quot;);</span>
+<span class="nc" id="L124">                String user_name = rs.getString(&quot;User_name&quot;);</span>
+<span class="nc" id="L125">                String user_email = rs.getString(&quot;User_email&quot;);</span>
+<span class="nc" id="L126">                String user_adress = rs.getString(&quot;User_adress&quot;);</span>
+<span class="nc" id="L127">                String user_phone = rs.getString(&quot;User_phone&quot;);</span>
+<span class="nc" id="L128">                int user_zip = rs.getInt(&quot;User_zip&quot;);</span>
+<span class="nc" id="L129">                Date order_recived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L130">                region = new getRegion(user_id, user_name, user_email, user_adress, user_phone, user_zip, order_recived);</span>
+<span class="nc" id="L131">                al.add(region);</span>
+<span class="nc" id="L132">            }</span>
+<span class="nc" id="L133">            pstmt.close();</span>
+<span class="nc" id="L134">            conn.close();</span>
+<span class="nc" id="L135">        } catch (SQLException ex) {</span>
+<span class="nc" id="L136">            ex.printStackTrace();</span>
+<span class="nc" id="L137">            throw new RegionException(&quot;Error in getAllCustomers() &quot; + ex.getMessage());</span>
+<span class="nc" id="L138">        }</span>
+
+<span class="nc" id="L140">        return al;</span>
+    }
+
+    // Get all region range 9010
+    public ArrayList&lt;getRegion&gt; getAllRegionsStartRange9010() throws RegionException {
+<span class="nc" id="L145">        getRegion region = null;</span>
+<span class="nc" id="L146">        ArrayList&lt;getRegion&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L148">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L149">            String sql = &quot;SELECT * FROM User INNER JOIN `Order` ON `Order`.FK_User_id = User.User_id WHERE User_zip &gt;= 9010 &amp;&amp; User_zip &lt;= 9990&quot;;</span>
+<span class="nc" id="L150">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L151">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L153">                int user_id = rs.getInt(&quot;User_id&quot;);</span>
+<span class="nc" id="L154">                String user_name = rs.getString(&quot;User_name&quot;);</span>
+<span class="nc" id="L155">                String user_email = rs.getString(&quot;User_email&quot;);</span>
+<span class="nc" id="L156">                String user_adress = rs.getString(&quot;User_adress&quot;);</span>
+<span class="nc" id="L157">                String user_phone = rs.getString(&quot;User_phone&quot;);</span>
+<span class="nc" id="L158">                int user_zip = rs.getInt(&quot;User_zip&quot;);</span>
+<span class="nc" id="L159">                Date order_recived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L160">                region = new getRegion(user_id, user_name, user_email, user_adress, user_phone, user_zip, order_recived);</span>
+<span class="nc" id="L161">                al.add(region);</span>
+<span class="nc" id="L162">            }</span>
+<span class="nc" id="L163">            pstmt.close();</span>
+<span class="nc" id="L164">            conn.close();</span>
+<span class="nc" id="L165">        } catch (SQLException ex) {</span>
+<span class="nc" id="L166">            ex.printStackTrace();</span>
+<span class="nc" id="L167">            throw new RegionException(&quot;Error in getAllCustomers() &quot; + ex.getMessage());</span>
+<span class="nc" id="L168">        }</span>
+
+<span class="nc" id="L170">        return al;</span>
+    }
+
+    public static void main(String[] args) throws RegionException {
+<span class="nc" id="L174">        ArrayList&lt;getRegion&gt; al = new RegionMapper().getAllRegionsStartRange1100();</span>
+<span class="nc" id="L175">        System.out.println(al);</span>
+
+<span class="nc" id="L177">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

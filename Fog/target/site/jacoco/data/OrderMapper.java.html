@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">data</a> &gt; <span class="el_source">OrderMapper.java</span></div><h1>OrderMapper.java</h1><pre class="source lang-java linenums">package data;
+
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import domain.entity.Order;
+import domain.entity.OrderData;
+import domain.entity.OrderDetail;
+import domain.entity.getOrder;
+import domain.exception.OrderException;
+import domain.exception.UserException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import static java.time.temporal.TemporalQueries.localDate;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import jdk.nashorn.internal.objects.NativeDate;
+
+/**
+ *
+ * @author Makemewant tobakoz
+ */
+<span class="nc" id="L31">public class OrderMapper {</span>
+
+    // Get one order, for testing that can recive one order from console in the first part
+    public Order getOrder(int id) throws OrderException {
+<span class="nc" id="L35">        Order order = null;</span>
+        try {
+<span class="nc" id="L37">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L38">            String sql = &quot;SELECT * FROM `Order` WHERE Order_id = ?&quot;;</span>
+<span class="nc" id="L39">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L40">            pstmt.setInt(1, id);</span>
+<span class="nc" id="L41">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L43">                int orderId = rs.getInt(&quot;Order_id&quot;);</span>
+<span class="nc" id="L44">                String orderStatus = rs.getString(&quot;Order_status&quot;);</span>
+<span class="nc" id="L45">                Boolean orderLogistic = rs.getBoolean(&quot;Order_logicstic&quot;);</span>
+<span class="nc" id="L46">                Date orderRecived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L47">                Date orderDelivered = rs.getDate(&quot;Order_delivered&quot;);</span>
+<span class="nc" id="L48">                int fkUserId = rs.getInt(&quot;FK_User_id&quot;);</span>
+<span class="nc" id="L49">                int fkUserRole = rs.getInt(&quot;FK_User_role_id&quot;);</span>
+<span class="nc" id="L50">                order = new Order(orderId, orderStatus, orderLogistic, orderRecived, orderDelivered, fkUserId, fkUserRole);</span>
+            }
+<span class="nc" id="L52">            pstmt.close();</span>
+<span class="nc" id="L53">            conn.close();</span>
+<span class="nc" id="L54">        } catch (SQLException ex) {</span>
+<span class="nc" id="L55">            ex.printStackTrace();</span>
+<span class="nc" id="L56">            throw new OrderException(&quot;Error in getOrder() &quot; + ex.getMessage());</span>
+<span class="nc" id="L57">        }</span>
+
+<span class="nc" id="L59">        return order;</span>
+    }
+
+    // Get OrderData, used in ControlOrderDetail 
+    public OrderData getOrderData(int orderId) throws OrderException {
+<span class="nc" id="L64">        OrderData od = null;</span>
+        try {
+<span class="nc" id="L66">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L67">            String sql = &quot;SELECT * FROM `OrderData` WHERE FK_Order_id = ?&quot;;</span>
+<span class="nc" id="L68">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L69">            pstmt.setInt(1, orderId);</span>
+<span class="nc" id="L70">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L72">                int od_length = rs.getInt(&quot;Orderdata_length&quot;);</span>
+<span class="nc" id="L73">                int od_width = rs.getInt(&quot;Orderdata_width&quot;);</span>
+<span class="nc" id="L74">                int od_height = rs.getInt(&quot;Orderdata_height&quot;);</span>
+<span class="nc" id="L75">                int od_floor = rs.getInt(&quot;Orderdata_floor&quot;);</span>
+<span class="nc" id="L76">                int od_roof = rs.getInt(&quot;Orderdata_roof&quot;);</span>
+<span class="nc" id="L77">                int od_side = rs.getInt(&quot;Orderdata_side&quot;);</span>
+<span class="nc" id="L78">                int fk_order_id = rs.getInt(&quot;FK_Order_id&quot;);</span>
+
+<span class="nc" id="L80">                od = new OrderData(od_length, od_width, od_height, od_floor, od_roof, od_side, fk_order_id);</span>
+            }
+<span class="nc" id="L82">            pstmt.close();</span>
+<span class="nc" id="L83">            conn.close();</span>
+<span class="nc" id="L84">        } catch (SQLException ex) {</span>
+<span class="nc" id="L85">            ex.printStackTrace();</span>
+<span class="nc" id="L86">            throw new OrderException(&quot;Error in getOrder() &quot; + ex.getMessage());</span>
+<span class="nc" id="L87">        }</span>
+
+<span class="nc" id="L89">        return od;</span>
+    }
+
+    /**
+     * This method getView to show all data in modal popup
+     *
+     * @param id
+     * @return returns getOrder object
+     * @throws domain.exception.OrderException throws an OrderException
+     */
+    public getOrder getOrderPopup(int id) throws OrderException {
+<span class="nc" id="L100">        getOrder getorder = null;</span>
+        try {
+<span class="nc" id="L102">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L103">            String sql = &quot;SELECT * FROM `Order` INNER JOIN OrderDetail ON OrderDetail.FK_Order_id = Order_id INNER JOIN Item ON Item.Item_id = OrderDetail.FK_Item_id INNER JOIN User ON `Order`.FK_User_id = User.User_id INNER JOIN OrderData ON `Order`.Order_id = OrderData.FK_Order_id WHERE `Order`.Order_id = ?&quot;;</span>
+<span class="nc" id="L104">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L105">            pstmt.setInt(1, id);</span>
+<span class="nc" id="L106">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (rs.next()) {</span>
+                // Order
+<span class="nc" id="L109">                int order_id = rs.getInt(&quot;Order_id&quot;);</span>
+<span class="nc" id="L110">                String order_status = rs.getString(&quot;Order_status&quot;);</span>
+<span class="nc" id="L111">                Boolean order_logicstic = rs.getBoolean(&quot;Order_logicstic&quot;);</span>
+<span class="nc" id="L112">                Date order_recived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L113">                Date order_delivered = rs.getDate(&quot;Order_delivered&quot;);</span>
+
+                // Order Data
+<span class="nc" id="L116">                int orderdata_lenght = rs.getInt(&quot;Orderdata_length&quot;);</span>
+<span class="nc" id="L117">                int orderdata_width = rs.getInt(&quot;Orderdata_width&quot;);</span>
+<span class="nc" id="L118">                int orderdata_height = rs.getInt(&quot;Orderdata_height&quot;);</span>
+<span class="nc" id="L119">                int orderdata_floor = rs.getInt(&quot;Orderdata_floor&quot;);</span>
+<span class="nc" id="L120">                int orderdata_roof = rs.getInt(&quot;Orderdata_roof&quot;);</span>
+<span class="nc" id="L121">                int orderdata_side = rs.getInt(&quot;Orderdata_side&quot;);</span>
+
+                // Orderdetail
+<span class="nc" id="L124">                int orderdetail_quantity = rs.getInt(&quot;Orderdetail_quantity&quot;);</span>
+
+                // Item
+<span class="nc" id="L127">                String item_name = rs.getString(&quot;Item_name&quot;);</span>
+<span class="nc" id="L128">                Double item_price = rs.getDouble(&quot;Item_price&quot;);</span>
+
+                // User
+<span class="nc" id="L131">                String user_name = rs.getString(&quot;User_name&quot;);</span>
+<span class="nc" id="L132">                String user_email = rs.getString(&quot;User_email&quot;);</span>
+<span class="nc" id="L133">                String user_adress = rs.getString(&quot;User_adress&quot;);</span>
+<span class="nc" id="L134">                String user_phone = rs.getString(&quot;User_phone&quot;);</span>
+<span class="nc" id="L135">                int user_zip = rs.getInt(&quot;User_zip&quot;);</span>
+
+<span class="nc" id="L137">                getorder = new getOrder(order_id, order_status, order_logicstic, order_recived, order_delivered, orderdata_lenght, orderdata_width, orderdata_height, orderdata_floor, orderdata_roof, orderdata_side, user_name, user_email, user_adress, user_phone, user_zip, orderdetail_quantity, item_name, item_price);</span>
+            }
+<span class="nc" id="L139">            pstmt.close();</span>
+<span class="nc" id="L140">            conn.close();</span>
+<span class="nc" id="L141">        } catch (SQLException ex) {</span>
+<span class="nc" id="L142">            ex.printStackTrace();</span>
+<span class="nc" id="L143">            throw new OrderException(&quot;Error in getOrderPopup() &quot; + ex.getMessage());</span>
+<span class="nc" id="L144">        }</span>
+
+<span class="nc" id="L146">        return getorder;</span>
+    }
+
+    /**
+     * This method gets a list of order by notApproved
+     *
+     * @return returns a list of order
+     * @throws domain.exception.OrderException
+     */
+    public ArrayList&lt;Order&gt; getOrderByStatusNotApprove() throws OrderException {
+<span class="nc" id="L156">        String notApprove = &quot;Ikke godkendt&quot;;</span>
+<span class="nc" id="L157">        Order order = null;</span>
+<span class="nc" id="L158">        ArrayList&lt;Order&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L160">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L161">            String sql = &quot;SELECT * FROM `Order` WHERE Order_status = ?&quot;;</span>
+<span class="nc" id="L162">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L163">            pstmt.setString(1, notApprove);</span>
+<span class="nc" id="L164">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L166">                int orderId = rs.getInt(&quot;Order_id&quot;);</span>
+<span class="nc" id="L167">                String orderStatus = rs.getString(&quot;Order_status&quot;);</span>
+<span class="nc" id="L168">                Boolean orderLogistic = rs.getBoolean(&quot;Order_logicstic&quot;);</span>
+<span class="nc" id="L169">                Date orderRecived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L170">                Date orderDelivered = rs.getDate(&quot;Order_delivered&quot;);</span>
+<span class="nc" id="L171">                int fkUserId = rs.getInt(&quot;FK_User_id&quot;);</span>
+<span class="nc" id="L172">                int fkUserRole = rs.getInt(&quot;FK_User_role_id&quot;);</span>
+<span class="nc" id="L173">                order = new Order(orderId, orderStatus, orderLogistic, orderRecived, orderDelivered, fkUserId, fkUserRole);</span>
+<span class="nc" id="L174">                al.add(order);</span>
+<span class="nc" id="L175">            }</span>
+<span class="nc" id="L176">            pstmt.close();</span>
+<span class="nc" id="L177">            conn.close();</span>
+<span class="nc" id="L178">        } catch (SQLException ex) {</span>
+<span class="nc" id="L179">            ex.printStackTrace();</span>
+<span class="nc" id="L180">            throw new OrderException(&quot;Error in getOrderByStatusNotApprove() &quot; + ex.getMessage());</span>
+<span class="nc" id="L181">        }</span>
+
+<span class="nc" id="L183">        return al;</span>
+    }
+
+    // used in ControlOrderDetail to get all details to that order
+    public ArrayList&lt;OrderDetail&gt; getAllOrderDetailById(int orderId) throws OrderException {
+
+<span class="nc" id="L189">        OrderDetail od = null;</span>
+<span class="nc" id="L190">        ArrayList&lt;OrderDetail&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L192">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L193">            String sql = &quot;SELECT * FROM fogdb.OrderDetail WHERE FK_Order_id = ?&quot;;</span>
+<span class="nc" id="L194">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L195">            pstmt.setInt(1, orderId);</span>
+<span class="nc" id="L196">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">            while (rs.next()) {</span>
+
+<span class="nc" id="L199">                int orderQuantity = rs.getInt(&quot;Orderdetail_quantity&quot;);</span>
+<span class="nc" id="L200">                int orderMeasurement = rs.getInt(&quot;Orderdetail_measurement&quot;);</span>
+<span class="nc" id="L201">                int fkOrderId = rs.getInt(&quot;FK_Order_id&quot;);</span>
+<span class="nc" id="L202">                int fkItemId = rs.getInt(&quot;FK_Item_id&quot;);</span>
+
+<span class="nc" id="L204">                od = new OrderDetail(orderQuantity, orderMeasurement, fkOrderId, fkItemId);</span>
+<span class="nc" id="L205">                al.add(od);</span>
+<span class="nc" id="L206">            }</span>
+<span class="nc" id="L207">            pstmt.close();</span>
+<span class="nc" id="L208">            conn.close();</span>
+<span class="nc" id="L209">        } catch (SQLException ex) {</span>
+<span class="nc" id="L210">            ex.printStackTrace();</span>
+<span class="nc" id="L211">            throw new OrderException(&quot;Error in getOrderByStatusNotApprove() &quot; + ex.getMessage());</span>
+<span class="nc" id="L212">        }</span>
+
+<span class="nc" id="L214">        return al;</span>
+    }
+
+    /**
+     * This method gets a list of order by Approved
+     *
+     * @return returns a list of order
+     * @throws domain.exception.OrderException
+     */
+    public ArrayList&lt;Order&gt; getOrderByStatusApprove() throws OrderException {
+<span class="nc" id="L224">        String Approve = &quot;Godkendt&quot;;</span>
+<span class="nc" id="L225">        Order order = null;</span>
+<span class="nc" id="L226">        ArrayList&lt;Order&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L228">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L229">            String sql = &quot;SELECT * FROM `Order` WHERE Order_status = ?&quot;;</span>
+<span class="nc" id="L230">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L231">            pstmt.setString(1, Approve);</span>
+<span class="nc" id="L232">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L234">                int orderId = rs.getInt(&quot;Order_id&quot;);</span>
+<span class="nc" id="L235">                String orderStatus = rs.getString(&quot;Order_status&quot;);</span>
+<span class="nc" id="L236">                Boolean orderLogistic = rs.getBoolean(&quot;Order_logicstic&quot;);</span>
+<span class="nc" id="L237">                Date orderRecived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L238">                Date orderDelivered = rs.getDate(&quot;Order_delivered&quot;);</span>
+<span class="nc" id="L239">                int fkUserId = rs.getInt(&quot;FK_User_id&quot;);</span>
+<span class="nc" id="L240">                int fkUserRole = rs.getInt(&quot;FK_User_role_id&quot;);</span>
+<span class="nc" id="L241">                order = new Order(orderId, orderStatus, orderLogistic, orderRecived, orderDelivered, fkUserId, fkUserRole);</span>
+<span class="nc" id="L242">                al.add(order);</span>
+<span class="nc" id="L243">            }</span>
+<span class="nc" id="L244">            pstmt.close();</span>
+<span class="nc" id="L245">            conn.close();</span>
+<span class="nc" id="L246">        } catch (SQLException ex) {</span>
+<span class="nc" id="L247">            ex.printStackTrace();</span>
+<span class="nc" id="L248">            throw new OrderException(&quot;Error in getOrderByStatusApprove() &quot; + ex.getMessage());</span>
+<span class="nc" id="L249">        }</span>
+
+<span class="nc" id="L251">        return al;</span>
+    }
+
+    /**
+     * This method gets a list of order by Packed
+     *
+     * @return returns a list of order
+     * @throws domain.exception.OrderException
+     */
+    public ArrayList&lt;Order&gt; getOrderByStatusPacked() throws OrderException {
+<span class="nc" id="L261">        String Packed = &quot;Pakket&quot;;</span>
+<span class="nc" id="L262">        Order order = null;</span>
+<span class="nc" id="L263">        ArrayList&lt;Order&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L265">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L266">            String sql = &quot;SELECT * FROM `Order` WHERE Order_status = ?&quot;;</span>
+<span class="nc" id="L267">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L268">            pstmt.setString(1, Packed);</span>
+<span class="nc" id="L269">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L271">                int orderId = rs.getInt(&quot;Order_id&quot;);</span>
+<span class="nc" id="L272">                String orderStatus = rs.getString(&quot;Order_status&quot;);</span>
+<span class="nc" id="L273">                Boolean orderLogistic = rs.getBoolean(&quot;Order_logicstic&quot;);</span>
+<span class="nc" id="L274">                Date orderRecived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L275">                Date orderDelivered = rs.getDate(&quot;Order_delivered&quot;);</span>
+<span class="nc" id="L276">                int fkUserId = rs.getInt(&quot;FK_User_id&quot;);</span>
+<span class="nc" id="L277">                int fkUserRole = rs.getInt(&quot;FK_User_role_id&quot;);</span>
+<span class="nc" id="L278">                order = new Order(orderId, orderStatus, orderLogistic, orderRecived, orderDelivered, fkUserId, fkUserRole);</span>
+<span class="nc" id="L279">                al.add(order);</span>
+<span class="nc" id="L280">            }</span>
+<span class="nc" id="L281">            pstmt.close();</span>
+<span class="nc" id="L282">            conn.close();</span>
+<span class="nc" id="L283">        } catch (SQLException ex) {</span>
+<span class="nc" id="L284">            ex.printStackTrace();</span>
+<span class="nc" id="L285">            throw new OrderException(&quot;Error in getOrderByStatusPacked() &quot; + ex.getMessage());</span>
+<span class="nc" id="L286">        }</span>
+
+<span class="nc" id="L288">        return al;</span>
+    }
+
+    /**
+     * This method gets a list of order by Shipped
+     *
+     * @return returns a list of order
+     * @throws domain.exception.OrderException
+     */
+    public ArrayList&lt;Order&gt; getOrderByStatusShipped() throws OrderException {
+<span class="nc" id="L298">        String Packed = &quot;Afsendt&quot;;</span>
+<span class="nc" id="L299">        Order order = null;</span>
+<span class="nc" id="L300">        ArrayList&lt;Order&gt; al = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L302">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L303">            String sql = &quot;SELECT * FROM `Order` WHERE Order_status = ?&quot;;</span>
+<span class="nc" id="L304">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L305">            pstmt.setString(1, Packed);</span>
+<span class="nc" id="L306">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L308">                int orderId = rs.getInt(&quot;Order_id&quot;);</span>
+<span class="nc" id="L309">                String orderStatus = rs.getString(&quot;Order_status&quot;);</span>
+<span class="nc" id="L310">                Boolean orderLogistic = rs.getBoolean(&quot;Order_logicstic&quot;);</span>
+<span class="nc" id="L311">                Date orderRecived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L312">                Date orderDelivered = rs.getDate(&quot;Order_delivered&quot;);</span>
+<span class="nc" id="L313">                int fkUserId = rs.getInt(&quot;FK_User_id&quot;);</span>
+<span class="nc" id="L314">                int fkUserRole = rs.getInt(&quot;FK_User_role_id&quot;);</span>
+<span class="nc" id="L315">                order = new Order(orderId, orderStatus, orderLogistic, orderRecived, orderDelivered, fkUserId, fkUserRole);</span>
+<span class="nc" id="L316">                al.add(order);</span>
+<span class="nc" id="L317">            }</span>
+<span class="nc" id="L318">            pstmt.close();</span>
+<span class="nc" id="L319">            conn.close();</span>
+<span class="nc" id="L320">        } catch (SQLException ex) {</span>
+<span class="nc" id="L321">            ex.printStackTrace();</span>
+<span class="nc" id="L322">            throw new OrderException(&quot;Error in getOrderByStatusShipped() &quot; + ex.getMessage());</span>
+<span class="nc" id="L323">        }</span>
+
+<span class="nc" id="L325">        return al;</span>
+
+    }
+
+    /**
+     * This method gets a order with paramter id and localdate. Used to
+     * Step-wizard, ControlInsertUserData
+     *
+     * @param userId
+     * @param orderRecive
+     * @return returns a order with paramter id and localdate
+     * @throws domain.exception.OrderException
+     */
+    public Order getOrderByUserIdAndOrderRecived(int userId, LocalDate orderRecive) throws OrderException {
+<span class="nc" id="L339">        Order order = null;</span>
+        try {
+<span class="nc" id="L341">            java.sql.Date sqlDate = java.sql.Date.valueOf(orderRecive);</span>
+
+<span class="nc" id="L343">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L344">            String sql = &quot;SELECT * FROM `Order` WHERE FK_User_id = ? AND Order_recived = ?&quot;;</span>
+<span class="nc" id="L345">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L346">            pstmt.setInt(1, userId);</span>
+<span class="nc" id="L347">            pstmt.setDate(2, sqlDate);</span>
+<span class="nc" id="L348">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L349" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L350">                int orderId = rs.getInt(&quot;Order_id&quot;);</span>
+<span class="nc" id="L351">                String orderStatus = rs.getString(&quot;Order_status&quot;);</span>
+<span class="nc" id="L352">                Boolean orderLogistic = rs.getBoolean(&quot;Order_logicstic&quot;);</span>
+<span class="nc" id="L353">                Date orderRecived = rs.getDate(&quot;Order_recived&quot;);</span>
+<span class="nc" id="L354">                Date orderDelivered = rs.getDate(&quot;Order_delivered&quot;);</span>
+<span class="nc" id="L355">                int fkUserId = rs.getInt(&quot;FK_User_id&quot;);</span>
+<span class="nc" id="L356">                int fkUserRole = rs.getInt(&quot;FK_User_role_id&quot;);</span>
+<span class="nc" id="L357">                order = new Order(orderId, orderStatus, orderLogistic, orderRecived, orderDelivered, fkUserId, fkUserRole);</span>
+            }
+<span class="nc" id="L359">            pstmt.close();</span>
+<span class="nc" id="L360">            conn.close();</span>
+<span class="nc" id="L361">        } catch (SQLException ex) {</span>
+<span class="nc" id="L362">            ex.printStackTrace();</span>
+<span class="nc" id="L363">            throw new OrderException(&quot;Error in getOrder() &quot; + ex.getMessage());</span>
+<span class="nc" id="L364">        }</span>
+
+<span class="nc" id="L366">        return order;</span>
+    }
+
+    /**
+     * This method is used to count how many zips in a range (Afdeling.jsp)
+     *
+     * @param minZip
+     * @param maxZip
+     * @return returns a order with paramter id and localdate
+     * @throws domain.exception.OrderException
+     */
+    public int getZipRange(int minZip, int maxZip) throws OrderException {
+<span class="nc" id="L378">        int countOrderByZip = 0;</span>
+
+        try {
+<span class="nc" id="L381">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L382">            String sql = &quot;SELECT COUNT(Order_id) AS TOTALORDERS FROM `Order` INNER JOIN User ON User.User_id = `Order`.FK_User_id WHERE User_zip &gt;= ? &amp;&amp; User_zip &lt;= ?&quot;;</span>
+<span class="nc" id="L383">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L384">            pstmt.setInt(1, minZip);</span>
+<span class="nc" id="L385">            pstmt.setInt(2, maxZip);</span>
+<span class="nc" id="L386">            ResultSet rs = pstmt.executeQuery();</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L388">                countOrderByZip = rs.getInt(&quot;TOTALORDERS&quot;);</span>
+
+            }
+<span class="nc" id="L391">            pstmt.close();</span>
+<span class="nc" id="L392">            conn.close();</span>
+<span class="nc" id="L393">        } catch (SQLException ex) {</span>
+<span class="nc" id="L394">            ex.printStackTrace();</span>
+<span class="nc" id="L395">            throw new OrderException(&quot;Error in getZipRange() &quot; + ex.getMessage());</span>
+<span class="nc" id="L396">        }</span>
+
+<span class="nc" id="L398">        return countOrderByZip;</span>
+    }
+
+    // UPDATE METHODS--------------
+    // Update an order by Order_id, ControlEditOrder
+    public void setOrderStatus(int id, String status) throws OrderException {
+        try {
+<span class="nc" id="L405">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L406">            String sql = &quot;UPDATE `fogdb`.`Order` SET `Order_status`=? WHERE `Order_id`=?&quot;;</span>
+<span class="nc" id="L407">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L408">            pstmt.setString(1, status);</span>
+<span class="nc" id="L409">            pstmt.setInt(2, id);</span>
+
+            // executeUpdate
+<span class="nc" id="L412">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L414">        } catch (SQLException ex) {</span>
+<span class="nc" id="L415">            ex.printStackTrace();</span>
+<span class="nc" id="L416">            throw new OrderException(&quot;Error in setOrderStatus() &quot; + ex.getMessage());</span>
+<span class="nc" id="L417">        }</span>
+<span class="nc" id="L418">    }</span>
+
+    // Update order data  by Order_id
+    // ControlEditData
+    public void setOrderData(int length, int width, int height, int floor, int roof, int side, int FK_Order_id) throws OrderException {
+        try {
+<span class="nc" id="L424">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L425">            String sql = &quot;UPDATE `fogdb`.`OrderData` SET `Orderdata_length`=?, `Orderdata_width`=?, `Orderdata_height`=?, `Orderdata_floor`=?, `Orderdata_roof`=?, `Orderdata_side`=? WHERE `FK_Order_id`=?&quot;;</span>
+<span class="nc" id="L426">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L427">            pstmt.setInt(1, length);</span>
+<span class="nc" id="L428">            pstmt.setInt(2, width);</span>
+<span class="nc" id="L429">            pstmt.setInt(3, height);</span>
+<span class="nc" id="L430">            pstmt.setInt(4, floor);</span>
+<span class="nc" id="L431">            pstmt.setInt(5, roof);</span>
+<span class="nc" id="L432">            pstmt.setInt(6, side);</span>
+<span class="nc" id="L433">            pstmt.setInt(7, FK_Order_id);</span>
+
+            // executeUpdate
+<span class="nc" id="L436">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L438">        } catch (SQLException ex) {</span>
+<span class="nc" id="L439">            ex.printStackTrace();</span>
+<span class="nc" id="L440">            throw new OrderException(&quot;Error in setOrderData() &quot; + ex.getMessage());</span>
+<span class="nc" id="L441">        }</span>
+<span class="nc" id="L442">    }</span>
+
+    // ControlDeleteOrder
+    public void deleteOrder(int id) throws OrderException {
+        try {
+
+<span class="nc" id="L448">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L449">            String sql = &quot;DELETE FROM `fogdb`.`Order` WHERE `Order_id`=?&quot;;</span>
+<span class="nc" id="L450">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L451">            pstmt.setInt(1, id);</span>
+
+            // executeUpdate
+<span class="nc" id="L454">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L456">        } catch (SQLException ex) {</span>
+<span class="nc" id="L457">            ex.printStackTrace();</span>
+<span class="nc" id="L458">            throw new OrderException(&quot;Error in setOrderStatus() &quot; + ex.getMessage());</span>
+<span class="nc" id="L459">        }</span>
+<span class="nc" id="L460">    }</span>
+
+    // Insert new order in stepwizard
+    public void insertNewOrder(int userId, LocalDate date) throws OrderException {
+        try {
+<span class="nc" id="L465">            java.sql.Date sqlDate = java.sql.Date.valueOf(date);</span>
+
+<span class="nc" id="L467">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L468">            String sql = &quot;INSERT INTO `fogdb`.`Order` (`Order_status`, `Order_logicstic`, `FK_User_id`, `FK_User_role_id`, `Order_recived`) VALUES ('Ikke godkendt', '0', ?, '1', ?)&quot;;</span>
+<span class="nc" id="L469">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L470">            pstmt.setInt(1, userId);</span>
+
+<span class="nc" id="L472">            pstmt.setDate(2, sqlDate);</span>
+
+            // executeUpdate
+<span class="nc" id="L475">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L477">        } catch (SQLException ex) {</span>
+<span class="nc" id="L478">            ex.printStackTrace();</span>
+<span class="nc" id="L479">            throw new OrderException(&quot;Error in setOrderStatus() &quot; + ex.getMessage());</span>
+<span class="nc" id="L480">        }</span>
+<span class="nc" id="L481">    }</span>
+
+    // Insert new orderData in stepwizard
+    public void insertNewOrderData(int orderData_length, int orderData_width, int orderData_height, int orderData_floor, int orderData_roof, int orderData_side, int orderId) throws OrderException {
+        try {
+
+<span class="nc" id="L487">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L488">            String sql = &quot;INSERT INTO `fogdb`.`OrderData` (`orderData_length`, `orderData_width`, `orderData_height`, `orderData_floor`, `orderData_roof`, `orderData_side`, `FK_Order_id`) VALUES (?, ?, ?, ?, ?, ?, ?)&quot;;</span>
+<span class="nc" id="L489">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+
+<span class="nc" id="L491">            pstmt.setInt(1, orderData_length);</span>
+<span class="nc" id="L492">            pstmt.setInt(2, orderData_width);</span>
+<span class="nc" id="L493">            pstmt.setInt(3, orderData_height);</span>
+<span class="nc" id="L494">            pstmt.setInt(4, orderData_floor);</span>
+<span class="nc" id="L495">            pstmt.setInt(5, orderData_roof);</span>
+<span class="nc" id="L496">            pstmt.setInt(6, orderData_side);</span>
+<span class="nc" id="L497">            pstmt.setInt(7, orderId);</span>
+
+            // executeUpdate
+<span class="nc" id="L500">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L502">        } catch (SQLException ex) {</span>
+<span class="nc" id="L503">            ex.printStackTrace();</span>
+<span class="nc" id="L504">            throw new OrderException(&quot;Error in setOrderStatus() &quot; + ex.getMessage());</span>
+<span class="nc" id="L505">        }</span>
+<span class="nc" id="L506">    }</span>
+
+    // Insert orderDetails in stepwizard
+    public void insertNewOrderDetail(int orderdetail_quantity, int orderdetail_measurement, int FK_Order_id, int FK_Item_id) throws OrderException {
+        try {
+
+<span class="nc" id="L512">            Connection conn = new DB().getConnection();</span>
+<span class="nc" id="L513">            String sql = &quot;INSERT INTO `fogdb`.`OrderDetail` (`Orderdetail_quantity`, `Orderdetail_measurement`, `FK_Order_id`, `FK_Item_id`) VALUES (?, ?, ?, ?)&quot;;</span>
+<span class="nc" id="L514">            PreparedStatement pstmt = conn.prepareStatement(sql);</span>
+
+<span class="nc" id="L516">            pstmt.setInt(1, orderdetail_quantity);</span>
+<span class="nc" id="L517">            pstmt.setInt(2, orderdetail_measurement);</span>
+<span class="nc" id="L518">            pstmt.setInt(3, FK_Order_id);</span>
+<span class="nc" id="L519">            pstmt.setInt(4, FK_Item_id);</span>
+
+            // executeUpdate
+<span class="nc" id="L522">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L524">        } catch (SQLException ex) {</span>
+<span class="nc" id="L525">            ex.printStackTrace();</span>
+<span class="nc" id="L526">            throw new OrderException(&quot;Error in setOrderStatus() &quot; + ex.getMessage());</span>
+<span class="nc" id="L527">        }</span>
+<span class="nc" id="L528">    }</span>
+
+    public static void main(String[] args) throws OrderException {
+        //  Order o = new OrderMapper().getOrder(1);
+        // System.out.println(o);
+<span class="nc" id="L533">        System.out.println(&quot;&quot;);</span>
+<span class="nc" id="L534">        ArrayList&lt;Order&gt; getOrderByStatusNotApprove = new OrderMapper().getOrderByStatusNotApprove();</span>
+<span class="nc" id="L535">        System.out.println(getOrderByStatusNotApprove);</span>
+<span class="nc" id="L536">        getOrder o = new OrderMapper().getOrderPopup(1);</span>
+<span class="nc" id="L537">        System.out.println(o);</span>
+
+<span class="nc" id="L539">        LocalDate ld = LocalDate.now();</span>
+<span class="nc" id="L540">        java.sql.Date sqlDate = java.sql.Date.valueOf(ld);</span>
+<span class="nc" id="L541">        System.out.println(sqlDate);</span>
+
+<span class="nc" id="L543">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

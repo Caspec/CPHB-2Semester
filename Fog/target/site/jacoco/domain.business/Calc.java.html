@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Calc.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">domain.business</a> &gt; <span class="el_source">Calc.java</span></div><h1>Calc.java</h1><pre class="source lang-java linenums">package domain.business;
+
+import data.DBFacade;
+import domain.entity.OrderDetail;
+import domain.exception.ItemException;
+import java.util.ArrayList;
+
+public class Calc {
+
+<span class="nc" id="L10">    DOFacade dof = new DOFacade();</span>
+
+<span class="nc" id="L12">    public Calc() {</span>
+<span class="nc" id="L13">    }</span>
+
+    // It shall ofcourse not just add to it.
+    public double getTotalPrice(ArrayList&lt;OrderDetail&gt; alod) throws ItemException {
+<span class="nc" id="L17">        double res = 0.0;</span>
+
+<span class="nc bnc" id="L19" title="All 2 branches missed.">        for (int i = 0; i &lt; alod.size(); i++) {</span>
+<span class="nc" id="L20">            int measurement = alod.get(i).getOrderMeasurement();</span>
+<span class="nc" id="L21">            int quantity = alod.get(i).getOrderQuantity();</span>
+<span class="nc" id="L22">            int itemId = alod.get(i).getFkItemId();</span>
+<span class="nc" id="L23">            double itemPrice = dof.getItem(itemId).getItem_price();</span>
+
+<span class="nc" id="L25">            res += (((measurement / 30) * quantity) * itemPrice);</span>
+        }
+
+<span class="nc" id="L28">        return res;</span>
+    }
+
+    public double getMomsPrice(double totalPrice){
+        
+<span class="nc" id="L33">        double res = 0.0;</span>
+        
+<span class="nc" id="L35">        res = (totalPrice / 100) * 25;</span>
+        
+<span class="nc" id="L37">        return res;</span>
+        
+    }
+    
+    // gets the measurement for the woodpillars
+    public int getMeasurementForWoodPillar(int orderHeight) {
+<span class="nc" id="L43">        int measurement = (orderHeight + 90);</span>
+
+<span class="nc" id="L45">        return measurement;</span>
+    }
+
+    // Gets the Measurement for the roof
+    // Calc for roof, takes width and shorten it with 1.4
+    public int getMeasurementForRoof(int orderWidth) {
+<span class="nc" id="L51">        int measurement = (int) (orderWidth / 1.4);</span>
+
+<span class="nc" id="L53">        return measurement;</span>
+    }
+
+    // Gets the Measurement for the roof
+    // Calc for roof, spidstag, quantity wood neeeded, 2 sides....
+    public int getQuantityForRoof(int orderLength) {
+<span class="nc" id="L59">        int measurement = ((orderLength / 30) * 2);</span>
+
+<span class="nc" id="L61">        return measurement;</span>
+    }
+
+    // Gets the Measurement for the sides
+    // First part is sides and calculatet so we know how many wood things we need and 2 x because there is 2 sides. Second part is width of the carport (bagbeklædning).
+    public int getQuantityForSide(int orderLength, int orderWidth) {
+<span class="nc" id="L67">        int measurement = ((orderLength / 30) * 2) + (orderWidth / 30);</span>
+
+<span class="nc" id="L69">        return measurement;</span>
+    }
+    
+    // gets the measurement for the floor
+    // Calc for floor
+    public int getMeasurementForFloor(int orderLength) {
+<span class="nc" id="L75">        int measurement = (orderLength / 30);</span>
+
+<span class="nc" id="L77">        return measurement;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

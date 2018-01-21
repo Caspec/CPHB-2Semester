@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>getOrder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">domain.entity</a> &gt; <span class="el_source">getOrder.java</span></div><h1>getOrder.java</h1><pre class="source lang-java linenums">
+package domain.entity;
+
+import java.util.Date;
+
+public class getOrder {
+    
+    // Order
+    private int order_id;
+    private String order_status;
+    private boolean order_logistic;
+    private Date order_recived;
+    private Date order_delivered;
+    
+    // OrderData
+    private int orderdata_lenght;
+    private int orderdata_width;
+    private int orderdata_height;
+    private int orderdata_floor;
+    private int orderdata_roof;
+    private int orderdata_side;
+    
+    // User
+    private String user_name;
+    private String user_email;
+    private String user_adress;
+    private String user_phone;
+    private int user_zip;
+    
+    // Orderdetail
+    private int orderdetail_quantity;
+    
+    // Item
+    private String item_name;
+    private double item_price;
+
+<span class="nc" id="L37">    public getOrder(int order_id, String order_status, boolean order_logistic, Date order_recived, Date order_delivered, int orderdata_lenght, int orderdata_width, int orderdata_height, int orderdata_floor, int orderdata_roof, int orderdata_side, String user_name, String user_email, String user_adress, String user_phone, int user_zip, int orderdetail_quantity, String item_name, double item_price) {</span>
+<span class="nc" id="L38">        this.order_id = order_id;</span>
+<span class="nc" id="L39">        this.order_status = order_status;</span>
+<span class="nc" id="L40">        this.order_logistic = order_logistic;</span>
+<span class="nc" id="L41">        this.order_recived = order_recived;</span>
+<span class="nc" id="L42">        this.order_delivered = order_delivered;</span>
+<span class="nc" id="L43">        this.orderdata_lenght = orderdata_lenght;</span>
+<span class="nc" id="L44">        this.orderdata_width = orderdata_width;</span>
+<span class="nc" id="L45">        this.orderdata_height = orderdata_height;</span>
+<span class="nc" id="L46">        this.orderdata_floor = orderdata_floor;</span>
+<span class="nc" id="L47">        this.orderdata_roof = orderdata_roof;</span>
+<span class="nc" id="L48">        this.orderdata_side = orderdata_side;</span>
+<span class="nc" id="L49">        this.user_name = user_name;</span>
+<span class="nc" id="L50">        this.user_email = user_email;</span>
+<span class="nc" id="L51">        this.user_adress = user_adress;</span>
+<span class="nc" id="L52">        this.user_phone = user_phone;</span>
+<span class="nc" id="L53">        this.user_zip = user_zip;</span>
+<span class="nc" id="L54">        this.orderdetail_quantity = orderdetail_quantity;</span>
+<span class="nc" id="L55">        this.item_name = item_name;</span>
+<span class="nc" id="L56">        this.item_price = item_price;</span>
+<span class="nc" id="L57">    }</span>
+
+    public int getOrder_id() {
+<span class="nc" id="L60">        return order_id;</span>
+    }
+
+    public String getOrder_status() {
+<span class="nc" id="L64">        return order_status;</span>
+    }
+
+    public void setOrder_status(String order_status) {
+<span class="nc" id="L68">        this.order_status = order_status;</span>
+<span class="nc" id="L69">    }</span>
+
+    public boolean isOrder_logistic() {
+<span class="nc" id="L72">        return order_logistic;</span>
+    }
+
+    public void setOrder_logistic(boolean order_logistic) {
+<span class="nc" id="L76">        this.order_logistic = order_logistic;</span>
+<span class="nc" id="L77">    }</span>
+
+    public Date getOrder_recived() {
+<span class="nc" id="L80">        return order_recived;</span>
+    }
+
+    public void setOrder_recived(Date order_recived) {
+<span class="nc" id="L84">        this.order_recived = order_recived;</span>
+<span class="nc" id="L85">    }</span>
+
+    public Date getOrder_delivered() {
+<span class="nc" id="L88">        return order_delivered;</span>
+    }
+
+    public void setOrder_delivered(Date order_delivered) {
+<span class="nc" id="L92">        this.order_delivered = order_delivered;</span>
+<span class="nc" id="L93">    }</span>
+
+    public int getOrderdata_lenght() {
+<span class="nc" id="L96">        return orderdata_lenght;</span>
+    }
+
+    public void setOrderdata_lenght(int orderdata_lenght) {
+<span class="nc" id="L100">        this.orderdata_lenght = orderdata_lenght;</span>
+<span class="nc" id="L101">    }</span>
+
+    public int getOrderdata_width() {
+<span class="nc" id="L104">        return orderdata_width;</span>
+    }
+
+    public void setOrderdata_width(int orderdata_width) {
+<span class="nc" id="L108">        this.orderdata_width = orderdata_width;</span>
+<span class="nc" id="L109">    }</span>
+
+    public int getOrderdata_height() {
+<span class="nc" id="L112">        return orderdata_height;</span>
+    }
+
+    public void setOrderdata_height(int orderdata_height) {
+<span class="nc" id="L116">        this.orderdata_height = orderdata_height;</span>
+<span class="nc" id="L117">    }</span>
+
+    public int getOrderdata_floor() {
+<span class="nc" id="L120">        return orderdata_floor;</span>
+    }
+
+    public void setOrderdata_floor(int orderdata_floor) {
+<span class="nc" id="L124">        this.orderdata_floor = orderdata_floor;</span>
+<span class="nc" id="L125">    }</span>
+
+    public int getOrderdata_roof() {
+<span class="nc" id="L128">        return orderdata_roof;</span>
+    }
+
+    public void setOrderdata_roof(int orderdata_roof) {
+<span class="nc" id="L132">        this.orderdata_roof = orderdata_roof;</span>
+<span class="nc" id="L133">    }</span>
+
+    public int getOrderdata_side() {
+<span class="nc" id="L136">        return orderdata_side;</span>
+    }
+
+    public void setOrderdata_side(int orderdata_side) {
+<span class="nc" id="L140">        this.orderdata_side = orderdata_side;</span>
+<span class="nc" id="L141">    }</span>
+
+    public String getUser_name() {
+<span class="nc" id="L144">        return user_name;</span>
+    }
+
+    public void setUser_name(String user_name) {
+<span class="nc" id="L148">        this.user_name = user_name;</span>
+<span class="nc" id="L149">    }</span>
+
+    public String getUser_email() {
+<span class="nc" id="L152">        return user_email;</span>
+    }
+
+    public void setUser_email(String user_email) {
+<span class="nc" id="L156">        this.user_email = user_email;</span>
+<span class="nc" id="L157">    }</span>
+
+    public String getUser_adress() {
+<span class="nc" id="L160">        return user_adress;</span>
+    }
+
+    public void setUser_adress(String user_adress) {
+<span class="nc" id="L164">        this.user_adress = user_adress;</span>
+<span class="nc" id="L165">    }</span>
+
+    public String getUser_phone() {
+<span class="nc" id="L168">        return user_phone;</span>
+    }
+
+    public void setUser_phone(String user_phone) {
+<span class="nc" id="L172">        this.user_phone = user_phone;</span>
+<span class="nc" id="L173">    }</span>
+
+    public int getUser_zip() {
+<span class="nc" id="L176">        return user_zip;</span>
+    }
+
+    public void setUser_zip(int user_zip) {
+<span class="nc" id="L180">        this.user_zip = user_zip;</span>
+<span class="nc" id="L181">    }</span>
+
+    public int getOrderdetail_quantity() {
+<span class="nc" id="L184">        return orderdetail_quantity;</span>
+    }
+
+    public void setOrderdetail_quantity(int orderdetail_quantity) {
+<span class="nc" id="L188">        this.orderdetail_quantity = orderdetail_quantity;</span>
+<span class="nc" id="L189">    }</span>
+
+    public String getItem_name() {
+<span class="nc" id="L192">        return item_name;</span>
+    }
+
+    public void setItem_name(String item_name) {
+<span class="nc" id="L196">        this.item_name = item_name;</span>
+<span class="nc" id="L197">    }</span>
+
+    public double getItem_price() {
+<span class="nc" id="L200">        return item_price;</span>
+    }
+
+    public void setItem_price(double item_price) {
+<span class="nc" id="L204">        this.item_price = item_price;</span>
+<span class="nc" id="L205">    }</span>
+    
+
+    
+           
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

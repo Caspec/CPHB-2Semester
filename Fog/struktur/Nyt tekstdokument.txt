@@ -1,0 +1,53 @@
+ // Get one order to show order in popup
+    public getOrder getOrderPopup(int id) throws OrderException
+    {
+        getOrder getorder = null;
+        try
+        {
+            Connection conn = new DB().getConnection();
+            String sql = "SELECT * FROM `Order` INNER JOIN OrderDetail ON OrderDetail.FK_Order_id = Order_id INNER JOIN Item ON Item.Item_id = OrderDetail.FK_Item_id INNER JOIN User ON `Order`.FK_User_id = User.User_id WHERE `Order`.Order_id = ?"; 
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next())
+            {
+                // Order
+                int order_id = rs.getInt("Order_id");
+                String order_status = rs.getString("Order_status");
+                Boolean order_logicstic = rs.getBoolean("Order_logicstic");
+                Date order_recived = rs.getDate("Order_recived");
+                Date order_delivered = rs.getDate ("Order_delivered");
+                
+                // Order Data
+                int orderdata_lenght = rs.getInt("Orderdata_lenght");
+                int orderdata_width = rs.getInt("Orderdata_width");
+                int orderdata_height = rs.getInt("Orderdata_height");
+                String orderdata_floor = rs.getString("Orderdata_floor");
+                String orderdata_roof = rs.getString("Orderdata_roof");
+                String orderdata_side = rs.getString("Orderata_side");
+                
+                // Orderdetail
+                int orderdetail_quantity = rs.getInt("Orderdetail_quantity");
+                
+                // Item
+                String item_name = rs.getString("Item_name");
+                Double item_price = rs.getDouble("Item_price");
+                int item_measurement = rs.getInt("Item_measurement");
+                
+                // User
+                String user_name = rs.getString("User_name");
+                String user_email = rs.getString("User_email");
+                String user_adress = rs.getString("User_adress");
+                String user_phone = rs.getString("User_phone");
+                int user_zip = rs.getInt("User_zip");
+
+                getorder = new getOrder(order_id, order_status, order_logicstic, order_recived, order_delivered, orderdata_lenght, orderdata_width, orderdata_height, orderdata_floor, orderdata_roof, orderdata_side, user_name, user_email, user_adress, user_phone, user_zip, orderdetail_quantity, item_name, item_price, item_measurement);
+            }
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new OrderException("Error in getOrderPopup() " + ex.getMessage());
+        }
+
+        return getorder;
+    }

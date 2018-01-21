@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">domain.entity</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package domain.entity;
+
+
+public class User {
+
+    private int id;
+    private String name;
+    private String password;
+    private String email;
+    private String adress;
+    private String phone;
+    private int zip;
+    private String img;
+    private int role;
+    private int department;
+
+    
+    public User(int id, String name, String password, String email, String adress, String phone, int zip, String img, int role, int department)
+<span class="nc" id="L19">    {</span>
+<span class="nc" id="L20">        this.id = id;</span>
+<span class="nc" id="L21">        this.name = name;</span>
+<span class="nc" id="L22">        this.password = password;</span>
+<span class="nc" id="L23">        this.email = email;</span>
+<span class="nc" id="L24">        this.adress = adress;</span>
+<span class="nc" id="L25">        this.phone = phone;</span>
+<span class="nc" id="L26">        this.zip = zip;</span>
+<span class="nc" id="L27">        this.img = img;</span>
+<span class="nc" id="L28">        this.role = role;</span>
+<span class="nc" id="L29">        this.department = department;</span>
+<span class="nc" id="L30">    }</span>
+
+    public User()
+<span class="nc" id="L33">    {</span>
+<span class="nc" id="L34">    }</span>
+
+    public int getId()
+    {
+<span class="nc" id="L38">        return id;</span>
+    }
+
+    public String getName()
+    {
+<span class="nc" id="L43">        return name;</span>
+    }
+
+    public void setName(String name)
+    {
+<span class="nc" id="L48">        this.name = name;</span>
+<span class="nc" id="L49">    }</span>
+
+    public String getPassword()
+    {
+<span class="nc" id="L53">        return password;</span>
+    }
+
+    public void setPassword(String password)
+    {
+<span class="nc" id="L58">        this.password = password;</span>
+<span class="nc" id="L59">    }</span>
+
+    public String getEmail()
+    {
+<span class="nc" id="L63">        return email;</span>
+    }
+
+    public void setEmail(String email)
+    {
+<span class="nc" id="L68">        this.email = email;</span>
+<span class="nc" id="L69">    }</span>
+
+    public String getAdress()
+    {
+<span class="nc" id="L73">        return adress;</span>
+    }
+
+    public void setAdress(String adress)
+    {
+<span class="nc" id="L78">        this.adress = adress;</span>
+<span class="nc" id="L79">    }</span>
+
+    public String getPhone()
+    {
+<span class="nc" id="L83">        return phone;</span>
+    }
+
+    public void setPhone(String phone)
+    {
+<span class="nc" id="L88">        this.phone = phone;</span>
+<span class="nc" id="L89">    }</span>
+
+    public int getZip()
+    {
+<span class="nc" id="L93">        return zip;</span>
+    }
+
+    public void setZip(int zip)
+    {
+<span class="nc" id="L98">        this.zip = zip;</span>
+<span class="nc" id="L99">    }</span>
+
+    public String getImg()
+    {
+<span class="nc" id="L103">        return img;</span>
+    }
+
+    public void setImg(String img)
+    {
+<span class="nc" id="L108">        this.img = img;</span>
+<span class="nc" id="L109">    }</span>
+
+    public int getRole()
+    {
+<span class="nc" id="L113">        return role;</span>
+    }
+
+    public void setRole(int role)
+    {
+<span class="nc" id="L118">        this.role = role;</span>
+<span class="nc" id="L119">    }</span>
+
+    public int getDepartment()
+    {
+<span class="nc" id="L123">        return department;</span>
+    }
+
+    public void setDepartment(int department)
+    {
+<span class="nc" id="L128">        this.department = department;</span>
+<span class="nc" id="L129">    }</span>
+
+    @Override
+    public String toString()
+    {
+<span class="nc" id="L134">        return &quot;User{&quot; + &quot;id=&quot; + id + &quot;, name=&quot; + name + &quot;, password=&quot; + password + &quot;, email=&quot; + email + &quot;, adress=&quot; + adress + &quot;, phone=&quot; + phone + &quot;, zip=&quot; + zip + &quot;, img=&quot; + img + &quot;, role=&quot; + role + &quot;, department=&quot; + department + '}';</span>
+    }
+
+    
+   
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

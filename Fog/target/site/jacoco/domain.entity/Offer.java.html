@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Offer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fog</a> &gt; <a href="index.source.html" class="el_package">domain.entity</a> &gt; <span class="el_source">Offer.java</span></div><h1>Offer.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package domain.entity;
+
+/**
+ *
+ * @author Makemewant
+ */
+public class Offer {
+
+    private int tilbud_id;
+    private String tilbud_name;
+    private String tilbud_info;
+    private String tilbud_img;
+    private int tilbud_rabat;
+
+<span class="nc" id="L20">    public Offer(int tilbud_id, String tilbud_name, String tilbud_info, String tilbud_img, int tilbud_rabat) {</span>
+<span class="nc" id="L21">        this.tilbud_id = tilbud_id;</span>
+<span class="nc" id="L22">        this.tilbud_name = tilbud_name;</span>
+<span class="nc" id="L23">        this.tilbud_info = tilbud_info;</span>
+<span class="nc" id="L24">        this.tilbud_img = tilbud_img;</span>
+<span class="nc" id="L25">        this.tilbud_rabat = tilbud_rabat;</span>
+<span class="nc" id="L26">    }</span>
+
+<span class="nc" id="L28">    public Offer() {</span>
+<span class="nc" id="L29">    }</span>
+
+    public int getTilbud_id() {
+<span class="nc" id="L32">        return tilbud_id;</span>
+    }
+
+    public String getTilbud_name() {
+<span class="nc" id="L36">        return tilbud_name;</span>
+    }
+
+    public void setTilbud_name(String tilbud_name) {
+<span class="nc" id="L40">        this.tilbud_name = tilbud_name;</span>
+<span class="nc" id="L41">    }</span>
+
+    public String getTilbud_info() {
+<span class="nc" id="L44">        return tilbud_info;</span>
+    }
+
+    public void setTilbud_info(String tilbud_info) {
+<span class="nc" id="L48">        this.tilbud_info = tilbud_info;</span>
+<span class="nc" id="L49">    }</span>
+
+    public String getTilbud_img() {
+<span class="nc" id="L52">        return tilbud_img;</span>
+    }
+
+    public void setTilbud_img(String tilbud_img) {
+<span class="nc" id="L56">        this.tilbud_img = tilbud_img;</span>
+<span class="nc" id="L57">    }</span>
+
+    public int getTilbud_rabat() {
+<span class="nc" id="L60">        return tilbud_rabat;</span>
+    }
+
+    public void setTilbud_rabat(int tilbud_rabat) {
+<span class="nc" id="L64">        this.tilbud_rabat = tilbud_rabat;</span>
+<span class="nc" id="L65">    }</span>
+
+
+    @Override
+    public String toString() {
+<span class="nc" id="L70">        return &quot;Tilbud{&quot; + &quot;tilbud_id=&quot; + tilbud_id + &quot;, tilbud_name=&quot; + tilbud_name + &quot;, tilbud_info=&quot; + tilbud_info + &quot;, tilbud_img=&quot; + tilbud_img + &quot;, tilbud_rabat=&quot; + tilbud_rabat + '}';</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
